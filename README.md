@@ -52,3 +52,4 @@ There are many!
   - Hovering over a symbol could automatically show its documentation
   - Showing the docs in a preview window would be nice
   - Using the same window for show docs (instead of opening up a new one for each query) would be a fine alternative to the preview window
+  - Offer omnicompletion for imports, exposing, after a dot
