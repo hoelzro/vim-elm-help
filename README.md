@@ -10,6 +10,10 @@ documentation in a web browser; I much prefer the offline, in-editor experience 
 plugins like manpageview and perlhelp provide when I'm working in C and Perl,
 respectively.
 
+Since I wrote this hurriedly at a conference, it was rather hastily put together.  It
+works for me, but your mileage may vary.  That being said, I would love it if people
+played around with this and helped me out with contributions or comments!
+
 ## Usage
 
 ### Generate Docs
