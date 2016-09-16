@@ -34,7 +34,9 @@ that argument will be pulled up in a new window.  For example, `:ElmHelp Keyboar
 
 If you don't provide an argument, `ElmHelp` will use whatever word is under the cursor.
 
-# Todo
+# Ideas for improvement
+
+There are many!
 
   - Privatize the internals of the Vim plugin
   - You need to be online to build the docs themselves, which is less than ideal
@@ -47,3 +49,6 @@ If you don't provide an argument, `ElmHelp` will use whatever word is under the 
   - Make links to other docs followable via `Ctrl-]` in docs pane
   - Tab complete symbols on Vim command line
   - Parse import statements in current buffer to find out what unqualified or alias-qualified identifiers resolve to, keeping in mind which symbols are imported from core by default
+  - Hovering over a symbol could automatically show its documentation
+  - Showing the docs in a preview window would be nice
+  - Using the same window for show docs (instead of opening up a new one for each query) would be a fine alternative to the preview window
