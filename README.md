@@ -1,7 +1,11 @@
 # Vim Elm Help
 
-  - I like offline doc access
-  - I like in-editor doc access
+This plugin allows you to view documentation for any Elm dependencies your project
+has, both directly from within Vim as well as offline.
+
+I wrote this plugin at elm-conf because I was working on some Elm code on the plane
+on my way to elm-conf, and I didn't like having to view the source of my dependencies
+to remember how to use certain functions.
 
 ## Usage
 
