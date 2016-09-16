@@ -14,6 +14,8 @@ respectively.
 
 ### Generate Docs
 
+**IMPORTANT**: You need to do this part while online!  After it's done, you're freeeeeee
+
 Run `bin/build-docs.pl` from the top level of your Elm project, and direct its output
 to `elm-docs.json`:
 
