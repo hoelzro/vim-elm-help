@@ -5,7 +5,10 @@ has, both directly from within Vim as well as offline.
 
 I wrote this plugin at elm-conf because I was working on some Elm code on the plane
 on my way to elm-conf, and I didn't like having to view the source of my dependencies
-to remember how to use certain functions.
+to remember how to use certain functions.  I also don't like viewing reference
+documentation in a web browser; I much prefer the offline, in-editor experience that
+plugins like manpageview and perlhelp provide when I'm working in C and Perl,
+respectively.
 
 ## Usage
 
