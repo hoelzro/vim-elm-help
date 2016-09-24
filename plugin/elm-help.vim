@@ -1,4 +1,4 @@
-function! FindDocsFile()
+function! s:FindDocsFile()
   let path_pieces = split(expand('%:p:h'), '/')
   let i = len(path_pieces) - 1
 
@@ -13,12 +13,12 @@ function! FindDocsFile()
   throw 'Unable to find elm-docs.json'
 endfunction
 
-function! LoadDocs()
+function! s:LoadDocs()
   if has_key(g:, 'elm_docs_cache')
     return g:elm_docs_cache
   endif
 
-  let docs_filename = FindDocsFile()
+  let docs_filename = <SID>FindDocsFile()
   let lines = readfile(docs_filename)
   let raw_content = join(lines, "\n")
   let g:elm_docs_cache = json_decode(raw_content)
@@ -26,14 +26,14 @@ function! LoadDocs()
   return g:elm_docs_cache
 endfunction
 
-function! ElmHelp(...)
+function! s:ElmHelp(...)
   if a:0 > 0
     let name = a:1
   else
     let name = expand('<cWORD>')
   endif
 
-  let docs = LoadDocs()
+  let docs = <SID>LoadDocs()
 
   topleft new
   setlocal noswapfile
@@ -51,4 +51,4 @@ function! ElmHelp(...)
   endif
 endfunction
 
-command! -nargs=? ElmHelp call ElmHelp(<f-args>)
+command! -nargs=? ElmHelp call <SID>ElmHelp(<f-args>)

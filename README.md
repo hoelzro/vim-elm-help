@@ -38,7 +38,6 @@ If you don't provide an argument, `ElmHelp` will use whatever word is under the 
 
 There are many!
 
-  - Privatize the internals of the Vim plugin
   - You need to be online to build the docs themselves, which is less than ideal
   - (related to above) Each module you use has its dependencies fetched, even if you have it in `elm-stuff` already
   - Doesn't generate docs for modules in your current project (this would be easy)
