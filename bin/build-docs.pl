@@ -1,15 +1,18 @@
 #!/usr/bin/env perl
 
-use autodie;
 use strict;
 use warnings;
 use feature qw(say);
 use experimental qw(signatures);
 
+use File::Spec;
 use File::Temp;
 use JSON qw(decode_json encode_json);
+use POSIX qw(:errno_h);
 
 sub read_text($filename) {
+    use autodie;
+
     open my $fh, '<', $filename;
     my $text = do { local $/; <$fh> };
     close $fh;
@@ -17,12 +20,80 @@ sub read_text($filename) {
 }
 
 sub write_text($filename, $contents) {
+    use autodie;
+
     open my $fh, '>', $filename;
     print {$fh} $contents;
     close $fh;
 }
 
+sub get_cache_dir {
+    if($^O eq 'MSWin32') {
+        return unless $ENV{'LOCALAPPDATA'};
+
+        return File::Spec->catdir($ENV{'LOCALAPPDATA'}, 'elm-docs-offline');
+    } elsif($^O eq 'darwin') {
+        return unless $ENV{'HOME'};
+        return File::Spec->catdir($ENV{'HOME'}, 'Library', 'Caches', 'elm-docs-offline');
+    } else {
+        if($ENV{'XDG_CACHE_HOME'}) {
+            return File::Spec->catdir($ENV{'XDG_CACHE_HOME'}, 'elm-docs-offline');
+        } else {
+            return unless $ENV{'HOME'};
+            return File::Spec->catdir($ENV{'HOME'}, '.cache', 'elm-docs-offline');
+        }
+    }
+}
+
+sub make_path($path) {
+    my ( $volume, $dirs, $filename ) = File::Spec->splitpath($path);
+    my @dirs = File::Spec->splitdir($dirs);
+
+    for my $i (0..$#dirs) {
+        my $ancestor = File::Spec->catpath($volume, File::Spec->catdir(@dirs[0..$i]), '');
+        if(!mkdir($ancestor) && $! != EEXIST) {
+            die "mkdir $ancestor failed; $!";
+        }
+    }
+}
+
+sub make_cacher($cache_dir) {
+    return ( sub {}, sub {} ) unless $cache_dir;
+
+    my $get = sub($key) {
+        my $path = File::Spec->catfile($cache_dir, $key);
+
+        my $fh;
+        if(!open($fh, '<', $path)) {
+            return;
+        }
+        my $contents = do {
+            local $/;
+            <$fh>
+        };
+        close $fh;
+        return $contents;
+    };
+
+    my $set = sub($key, $value) {
+        my $path = File::Spec->catfile($cache_dir, $key);
+        make_path($path);
+
+        my $fh;
+        if(!open($fh, '>', $path)) {
+            warn "$path: $!";
+            return;
+        }
+        print {$fh} $value;
+        close $fh;
+    };
+
+    return ( $get, $set );
+}
+
 sub generate_docs($package, $version) {
+    use autodie;
+
     my $docs_file = File::Temp->new;
 
     my $pid = fork;
@@ -62,12 +133,19 @@ sub flush {
     print encode_json(\%symbols);
 }
 
+my ( $cache_get, $cache_set ) = make_cacher(get_cache_dir());
 my $dependencies = decode_json(read_text 'elm-stuff/exact-dependencies.json');
 
 foreach my $package (sort keys %$dependencies) {
     my $version = $dependencies->{$package};
 
-    my $docs = generate_docs($package, $version);
+    my $docs = $cache_get->("$package-$version");
+    if($docs) {
+        $docs = decode_json($docs);
+    } else {
+        $docs = generate_docs($package, $version);
+        $cache_set->("$package-$version", encode_json($docs));
+    }
 
     foreach my $module (@$docs) {
         emit(

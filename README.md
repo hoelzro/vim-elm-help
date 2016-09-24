@@ -41,8 +41,6 @@ There are many!
   - You need to be online to build the docs themselves, which is less than ideal
   - (related to above) Each module you use has its dependencies fetched, even if you have it in `elm-stuff` already
   - Doesn't generate docs for modules in your current project (this would be easy)
-  - Cache docs output for package + version pairs
-    - Such a cache would be simple to implement, very effective, and would prevent the need to go online to build the docs
     - Don't cache the current module, though
   - Render markdown as text for docs pane (including transclusion of `@docs`)
   - Make links to other docs followable via `Ctrl-]` in docs pane
