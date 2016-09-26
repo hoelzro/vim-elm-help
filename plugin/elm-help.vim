@@ -3,22 +3,27 @@ function! s:FindDocsFile()
   let i = len(path_pieces) - 1
 
   while i >= 0
-    let path = '/' . join(path_pieces[0:i], '/') . '/elm-docs.json'
-    if filereadable(path)
-      return path
+    let dir = '/' . join(path_pieces[0:i], '/')
+    if filereadable(dir . '/elm-package.json')
+      return dir . '/elm-docs.json'
     endif
 
     let i -= 1
   endwhile
-  throw 'Unable to find elm-docs.json'
+  throw 'Unable to find elm-package.json'
 endfunction
 
 function! s:LoadDocs()
+  " XXX check if file has changed?
   if has_key(g:, 'elm_docs_cache')
     return g:elm_docs_cache
   endif
 
   let docs_filename = <SID>FindDocsFile()
+
+  if !filereadable(docs_filename)
+    throw 'Docs have not been created yet'
+  endif
   let lines = readfile(docs_filename)
   let raw_content = join(lines, "\n")
   let g:elm_docs_cache = json_decode(raw_content)
