@@ -20,6 +20,11 @@ played around with this and helped me out with contributions or comments!
 
 **IMPORTANT**: You need to do this part while online!  After it's done, you're freeeeeee
 
+The `:ElmBuildDocs` command will build a documentation database and put it into
+`elm-docs.json` at your project root.
+
+Alternatively, you may do this from the command line, like so...
+
 Run `bin/build-docs.pl` from the top level of your Elm project, and direct its output
 to `elm-docs.json`:
 
@@ -51,3 +56,4 @@ There are many!
   - Using the same window for show docs (instead of opening up a new one for each query) would be a fine alternative to the preview window
   - Offer omnicompletion for imports, exposing, after a dot
   - You could potentially provide gd and gD with this information
+  - Write help file
