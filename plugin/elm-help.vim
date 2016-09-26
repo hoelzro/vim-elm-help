@@ -56,4 +56,20 @@ function! s:ElmHelp(...)
   endif
 endfunction
 
+let s:build_docs_script = expand('<sfile>:p:h:h') . '/bin/build-docs.pl'
+
+function! s:ElmBuildDocs()
+  let lines = systemlist('perl ' . s:build_docs_script)
+  if type(lines) == v:t_string && lines == ''
+    echomsg 'An error occurred when running the database building script'
+  endif
+  if v:shell_error != 0 && v:shell_error != 1
+    " 0 is success, 1 is our special error for "don't worry about it"
+    echomsg 'An error occurred when running the database building script'
+  endif
+  let outpath = <SID>FindDocsFile()
+  call writefile(lines, outpath)
+endfunction
+
 command! -nargs=? ElmHelp call <SID>ElmHelp(<f-args>)
+command! -nargs=0 ElmBuildDocs call <SID>ElmBuildDocs()
