@@ -51,4 +51,3 @@ There are many!
   - Using the same window for show docs (instead of opening up a new one for each query) would be a fine alternative to the preview window
   - Offer omnicompletion for imports, exposing, after a dot
   - You could potentially provide gd and gD with this information
-  - (Re)Build docs via a Vim command
