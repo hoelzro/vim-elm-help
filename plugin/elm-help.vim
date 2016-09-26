@@ -14,7 +14,6 @@ function! s:FindDocsFile()
 endfunction
 
 function! s:LoadDocs()
-  " XXX check if file has changed?
   if has_key(g:, 'elm_docs_cache')
     return g:elm_docs_cache
   endif
@@ -69,6 +68,7 @@ function! s:ElmBuildDocs()
   endif
   let outpath = <SID>FindDocsFile()
   call writefile(lines, outpath)
+  unlet g:elm_docs_cache
 endfunction
 
 command! -nargs=? ElmHelp call <SID>ElmHelp(<f-args>)
